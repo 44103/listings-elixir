@@ -1,0 +1,103 @@
+\documentclass[dvipdfmx,uplatex,a4paper]{article}
+
+\usepackage[dvipdfmx]{graphicx, xcolor}
+\usepackage[textwidth=50zw,lines=45]{geometry}
+\usepackage{listings}
+\usepackage{listings-elixir}
+
+\lstset{
+  numberstyle={\scriptsize \color{black}},
+  ndkeywordstyle={\small},
+  frame={LBrt},
+  numbers=left,
+  stepnumber=1,
+  keepspaces=true
+}
+
+\begin{document}
+
+\section*{Light Mode}
+\begin{lstlisting}[language=elixir,style=light]
+defmodule SerialNum do
+  defstruct first: nil, last: nil
+  @type t(first, last) :: %SerialNum{first: first, last: last}
+  @type t :: %SerialNum{first: integer, last: integer}
+end
+
+defmodule Example do
+  @spec square_sum(SerialNum.t()) :: integer
+  def square_sum(nums) do
+    for i <- nums.first..nums.last do: i
+    |> Enum.map(fn num -> num * num end)
+    |> Enum.sum()
+    |> round
+  end
+end
+\end{lstlisting}
+
+\begin{lstlisting}[language=elixir,style=light]
+defmodule TimelineLive do
+  use Phoenix.LiveView
+
+  def render(assigns) do
+    render("timeline.html", assigns)
+  end
+
+  def mount(_, socket) do
+    Twitter.subscribe("elixirphoenix")
+    {:ok, assign(socket, :tweets, [])}
+  end
+
+  def handle_info({:new, tweet}, socket) do
+    {:noreply,
+     update(socket, :tweets, fn tweets ->
+       Enum.take([tweet | tweets], 10)
+     end)}
+  end
+end
+\end{lstlisting}
+
+\newpage
+
+\section*{Dark Mode}
+\begin{lstlisting}[language=elixir,style=dark]
+defmodule SerialNum do
+  defstruct first: nil, last: nil
+  @type t(first, last) :: %SerialNum{first: first, last: last}
+  @type t :: %SerialNum{first: integer, last: integer}
+end
+
+defmodule Example do
+  @spec square_sum(SerialNum.t()) :: integer
+  def square_sum(nums) do
+    for i <- nums.first..nums.last do: i
+    |> Enum.map(fn num -> num * num end)
+    |> Enum.sum()
+    |> round
+  end
+end
+\end{lstlisting}
+
+\begin{lstlisting}[language=elixir,style=dark]
+defmodule TimelineLive do
+  use Phoenix.LiveView
+
+  def render(assigns) do
+    render("timeline.html", assigns)
+  end
+
+  def mount(_, socket) do
+    Twitter.subscribe("elixirphoenix")
+    {:ok, assign(socket, :tweets, [])}
+  end
+
+  def handle_info({:new, tweet}, socket) do
+    {:noreply,
+     update(socket, :tweets, fn tweets ->
+        Enum.take([tweet | tweets], 10)
+     end)}
+  end
+end
+\end{lstlisting}
+
+\end{document}
